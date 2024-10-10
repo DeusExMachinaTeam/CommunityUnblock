@@ -7,67 +7,46 @@
 Инструкция помогающая продолжить пользоваться расположенными в Discord и YouTube ресурсами фан сообществ по Ex Machina, находясь в РФ.
 Будет по возможности обновляться актуальными способами обхода блокировок.
 
+# Способ обхода блокировок Discord и YouTube от Овера
 
-
-# (UPD Вероятно на текущий момент с ютубом не работает. Обновление способов в ближайшее время.)Способ обхода блокировок Discord и YouTube от Овера
-
-> ## Уточнение
->
-> *Не претендую на идеальность этого способа, использую его потому как изначально использовал GoodbyeDPI для обхода блокировок YouTube. После блокировки Discord разбираться с тем как с  нуля заводить какой то другой софт у меня желания не было. Поэтому к возможностям GoodbyeDPI пришлось добавить возможности аналогичной анти-dpi программы Zapret.*
->
-> ## Антивирусы
+> **Антивирусы**
 >
 > *Есть большая вероятность, что антивирусы будут блокировать попытки скачать необходимый нам софт. Поэтому рекомендую их отключить заранее.*
 
-## Устанавливаем GoodbyeDPI
+## Устанавливаем Zapret
 
-1. Скачиваем GoodbyeDPI с официального репозитория <https://github.com/ValdikSS/GoodbyeDPI/releases/tag/0.2.3rc3> нас интересует **goodbyedpi-0.2.3rc3-2.zip** в разделе Assets.
+1. Скачиваем Zapret для Windows с официального репозитория. [<https://github.com/bol-van/zapret>](https://github.com/bol-van/zapret-win-bundle/archive/refs/heads/master.zip)
 2. Распаковываем архив в любое место на компьютере.
-3. Открываем файл **1_russia_blacklist_YOUTUBE_ALT.cmd** текстовым редактором. Нам необходимо настроить программу для работы. Я буду приводить пример для работы со своим провайдером и в своем регионе, есть вероятность, что у вас оно так просто не заведется и потребуется поискать возможные варианты настроек подходящие для вас.
-
-    Находим строку
-
-    ```text
-    start "" goodbyedpi.exe -5 -e1 -q --fake-gen 5 --fake-from-hex 160301FFFF01FFFFFF0303594F5552204144564552544953454D454E542048455245202D202431302F6D6F000000000009000000050003000000 --blacklist ..\russia-blacklist.txt --blacklist ..\russia-youtube.txt
-    ```
-
-    В ней меняем параметр **--fake-gen 5** на **--fake-gen 29** файл не закрываем.
-
-4. Переходим на сайт <https://www.browserling.com/tools/random-hex> тут нам нужно сгенереровать другой hex указываем 116 символов и 1 результат.
-
-    Указываем его в поле **--fake-from-hex** вместо старого.\
-    В итоге строка должна выглядеть подобным образом но с вашим hex.
+3. Заходим в папку **zapret-winws**
+4. Создаем текстовый файл сразу меняем ему расширение на **cmd** например **fuckrkn.cmd**
+5. Вставляем в файл следующие строки и сохраняем.
 
     ```text
-    start "" goodbyedpi.exe -5 -e1 -q --fake-gen 29 --fake-from-hex 1cedb3c89a721510fe17248cf7fee9f9d164d3a4377127cb88cf5d5d492c2f629dcbeddca8bbb238347e33b421a13df4f482aa9ea71b802804d0 --blacklist ..\russia-blacklist.txt --blacklist ..\russia-youtube.txt
+    start "zapret: http,https,quic" /min "%~dp0winws.exe" ^
+    --wf-l3=ipv4,ipv6 --wf-tcp=443 --wf-udp=443,50000-65535 ^
+    --filter-udp=443 --hostlist="%~dp0list-youtube.txt" --dpi-desync=fake --dpi-desync-repeats=11 --dpi-desync-fake-quic="%~dp0quic_initial_www_google_com.bin" --new ^
+    --filter-tcp=443 --hostlist="%~dp0list-youtube.txt" --dpi-desync=fake,split2 --dpi-desync-split-seqovl=1 --dpi-desync-split-tls=sniext --dpi-desync-fake-tls="%~dp0tls_clienthello_www_google_com.bin" --dpi-desync-ttl=4 --new ^
+     --filter-udp=443 --hostlist="%~dp0list-discord.txt" --dpi-desync=fake --dpi-desync-udplen-increment=10 --dpi-desync-repeats=6 --dpi-desync-udplen-pattern=0xDEADBEEF --dpi-desync-fake-quic="%~dp0quic_initial_www_google_com.bin" --new ^
+    --filter-udp=50000-65535 --dpi-desync=fake,tamper --dpi-desync-any-protocol --dpi-desync-fake-quic="%~dp0quic_initial_www_google_com.bin" --new ^
+    --filter-tcp=443 --hostlist="%~dp0list-discord.txt" --dpi-desync=fake,split2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig --dpi-desync-fake-tls="%~dp0tls_clienthello_www_google_com.bin"
     ```
 
-    Сохраняем файл, закрываем. На данном этапе если мы будем запускать файл **1_russia_blacklist_YOUTUBE_ALT.cmd** с правами администратора у нас уже должен быть работающий YouTube. Но Discord работать пока не будет.
-
-5. Чиним текстовую часть дискорда. Открываем в текстовом редакторе файл **russia-blacklist.txt** в конец файла добавляем строки:
+6. Создаем в этой же папке файл list-discord.txt и добавляем в него следующие строки.
 
     ```text
     discord.com
-    discordapp.com
     discord.gg
+    discordapp.com
     discordapp.net
     discord.media
     discord-attachments-uploads-prd.storage.googleapis.com
+    dis.gd
+    discord.co
+    discordcdn.com
+    discordstatus.com
     ```
 
-    Теперь Discord должен запускаться и работать весь функционал кроме голосовых чатов. Для их починки я установил Zapret, об этом в следующем разделе.
-
-## Устанавливаем Zapret
-
-1. Скачиваем Zapret с официального репозитория. <https://github.com/bol-van/zapret> для этого нажимаем зеленую кнопку **<>Code** и в открывшемся меню **DownloadZIP**
-2. Распаковываем архив в любое место на компьютере.
-3. В распакованной папке идем по пути **\binaries\win64\zapret-winws** тут у нас 2 ~~стула~~ пути, либо создать новый cmd файл либо отредактировать старый. Давайте для простоты возьмем существующий **preset_russia.cmd** открываем в текстовом редакторе, удаляем все содержимое и вставляем строку:
-
-    ```text
-    start "zapret: quic" /min "%~dp0winws.exe" --wf-udp=50000-65535 --dpi-desync=fake --dpi-desync-cutoff=d4 --dpi-desync-repeats=6 --dpi-desync-any-protocol
-    ```
-
-    Теперь запускаем файл **preset_russia.cmd** с правами администратора. Теперь голосовые чаты в Discord должны работать.
+7. Теперь запускаем файл **fuckrkn.cmd** с правами администратора. Ютуб и дискорд должны исправно работать. К сожалению вероятность не 100% и возможно конкретно для вашего провайдера потребуется крутить какие то настройки. Для поиска информации я рекомендую посетить форум [ntc.party](https://ntc.party/) если есть VPN, если нет то обсуждение в GitHub запрета <https://github.com/bol-van/zapret/discussions>.
 
 ## Еще пара слов об обходе блокировок
 
@@ -86,4 +65,3 @@
 * [Канал Павлика RPG](https://youtube.com/c/rpggameland)
 * [Канал EM2ch](https://www.youtube.com/@em2ch)
 * [Канал stakan](https://www.youtube.com/@stakanyash)
-
