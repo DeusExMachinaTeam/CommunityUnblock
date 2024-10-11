@@ -15,7 +15,7 @@
 
 ## Устанавливаем Zapret
 
-1. Скачиваем Zapret для Windows с официального репозитория. [<https://github.com/bol-van/zapret>](https://github.com/bol-van/zapret-win-bundle/archive/refs/heads/master.zip)
+1. Скачиваем Zapret для Windows с официального репозитория. https://github.com/bol-van/zapret-win-bundle/archive/refs/heads/master.zip
 2. Распаковываем архив в любое место на компьютере.
 3. Заходим в папку **zapret-winws**
 4. Создаем текстовый файл сразу меняем ему расширение на **cmd** например **fuckrkn.cmd**
